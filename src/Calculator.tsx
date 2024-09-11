@@ -307,7 +307,7 @@ function MatrixCalculator() {
         <Button onClick={handleMultiplication}>A <FaTimes/> B</Button>
         <Button onClick={handleInverseA}>A<sup>-1</sup></Button>
         <Button onClick={handleInverseB}>B<sup>-1</sup></Button>
-        <Button onClick={handleClear}>C</Button>
+        <Button onClick={handleClear}>Clear</Button>
       </div>
       {/* Resultado */}
       <div className='container-resultado'>

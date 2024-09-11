@@ -11,12 +11,18 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-
-    /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "types": [
+  	"node",
+  	"vite/client",
+  	"vitest",
+  	"jest"
+	  ]
   },
-  "include": ["vite.config.ts"]
+  "include": [
+    "./vite.config.ts",
+    "./vite.setup.ts",
+    "./src/**/*.ts",
+    "./tests/**/*.ts"
+  ]
 }
