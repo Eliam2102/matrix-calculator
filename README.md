@@ -12,7 +12,7 @@ Este proyecto es una calculadora de matrices unidimensionales, bidimensionales y
 
 ## Tecnologías Utilizadas
 
-- **React**: Biblioteca JavaScript para construir interfaces de usuario.
+- **React(/https://es.react.dev/)**: Biblioteca JavaScript para construir interfaces de usuario.
 - **TypeScript**: Superset de JavaScript que añade tipado estático.
 - **SweetAlert**: Librería para mostrar alertas personalizadas en la interfaz.
 - **Zod**: Librería para la validación de esquemas y manejo de datos.
@@ -23,3 +23,20 @@ Este proyecto es una calculadora de matrices unidimensionales, bidimensionales y
 1. Clona el repositorio:
    ```bash
    git clone https://github.com/Eliam2102/matrix-calculator.git
+
+## Ejecutare el proyecto
+
+2. Instalar las dependencias con el comando:
+
+```
+npm install o npx install
+```
+
+3. Una vez que tenemos las dependecias necesarias para el proyecto ejecutamos el comando:
+
+```
+npm run dev
+```
+
+
+
