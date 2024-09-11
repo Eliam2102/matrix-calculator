@@ -1,50 +1,25 @@
-# React + TypeScript + Vite
+# Matrix Calculator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una calculadora de matrices unidimensionales, bidimensionales y tridimensionales, desarrollada en React y TypeScript, con soporte para matrices 3xN. El objetivo principal es proporcionar una interfaz amigable que simule una calculadora física, permitiendo la manipulación y visualización de matrices de forma eficiente.
 
-Currently, two official plugins are available:
+## Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Soporte para matrices unidimensionales, bidimensionales y tridimensionales.
+- Exportación de resultados en formato de fracciones.
+- Interfaz de usuario con diseño inspirado en calculadoras físicas.
+- Visualización de matrices como mosaicos organizados en cuadrículas.
+- Funcionalidad offline gracias a Service Workers.
 
-## Expanding the ESLint configuration
+## Tecnologías Utilizadas
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **React**: Biblioteca JavaScript para construir interfaces de usuario.
+- **TypeScript**: Superset de JavaScript que añade tipado estático.
+- **SweetAlert**: Librería para mostrar alertas personalizadas en la interfaz.
+- **Zod**: Librería para la validación de esquemas y manejo de datos.
+- **Service Workers**: Proporciona funcionalidad offline a la aplicación.
 
-- Configure the top-level `parserOptions` property like this:
+## Instalación
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/Eliam2102/matrix-calculator.git
