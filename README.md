@@ -1,6 +1,6 @@
 # Matrix Calculator
 
-Este proyecto es una calculadora de matrices unidimensionales, bidimensionales y tridimensionales, desarrollada en React y TypeScript, con soporte para matrices 3xN. El objetivo principal es proporcionar una interfaz amigable que simule una calculadora física, permitiendo la manipulación y visualización de matrices de forma eficiente.
+Este proyecto es una calculadora de matrices unidimensionales, bidimensionales y tridimensionales, desarrollada en React y TypeScript. El objetivo principal es proporcionar una interfaz amigable que simule una calculadora física, permitiendo la manipulación y visualización de matrices de forma eficiente.
 
 ## Características
 
@@ -8,7 +8,7 @@ Este proyecto es una calculadora de matrices unidimensionales, bidimensionales y
 - Exportación de resultados en formato de fracciones.
 - Interfaz de usuario con diseño inspirado en calculadoras físicas.
 - Visualización de matrices como mosaicos organizados en cuadrículas.
-- Funcionalidad offline gracias a Service Workers.
+
 
 ## Tecnologías Utilizadas
 
@@ -16,7 +16,6 @@ Este proyecto es una calculadora de matrices unidimensionales, bidimensionales y
 - **[TypeScript](https://www.typescriptlang.org/)**: Superset de JavaScript que añade tipado estático.
 - **[SweetAlert](https://sweetalert2.github.io/)**: Librería para mostrar alertas personalizadas en la interfaz.
 - **[Zod](https://zod.dev/)**: Librería para la validación de esquemas y manejo de datos.
-- **Service Workers**: Proporciona funcionalidad offline a la aplicación.
 - **[Vitest](https://vitest.dev/)**: Ejecutar testing a sus componentes.
 
 ## Instalación
