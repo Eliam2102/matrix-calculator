@@ -1,140 +1,145 @@
-import { useState } from 'react';
-import Button from './Button';
+import React, { useState } from 'react';
 import './Calculator.css';
-import './MatrixDisplay.css';
-import casio from './assets/casio.png';
+import { FaPlus, FaTimes} from 'react-icons/fa';
+import { FaMinus } from 'react-icons/fa6';
 
-function Calculator() {
-  const [matrizDisplayValue, setMatrizDisplayValue] = useState<number[][][]>([[[0]]]);
-  const [matrixType, setMatrixType] = useState<'1D' | '2D' | '3D'>('1D');
-  const [columns, setColumns] = useState<number>(1);
+function MatrixCalculator() {
+  // Estados para matrices A y B
+  const [matrizA, setMatrizA] = useState<number[][]>([[0]]);
+  const [matrizB, setMatrizB] = useState<number[][]>([[0]]);
+  const [dimensionsA, setDimensionsA] = useState({ rows: 1, cols: 1 });
+  const [dimensionsB, setDimensionsB] = useState({ rows: 1, cols: 1 });
+  const [result, setResult] = useState<number[][] | null>(null);
 
-  function initializeMatrix(type: '1D' | '2D' | '3D', columns: number): number[][][] {
-    switch (type) {
-      case '1D':
-        return [[[...Array(columns).fill(0)]]];
-      case '2D':
-        return [[...Array(2).fill(0).map(() => Array(columns).fill(0))]];
-      case '3D':
-        return [...Array(3).fill(0).map(() => Array(columns).fill(0))];
-      default:
-        return [[[0]]];
+  // Función para actualizar las dimensiones de la matriz A
+  const handleDimensionsAChange = (rows: number, cols: number) => {
+    setDimensionsA({ rows, cols });
+    setMatrizA(Array.from({ length: rows }, () => Array(cols).fill(0)));
+  };
+
+  // Función para actualizar las dimensiones de la matriz B
+  const handleDimensionsBChange = (rows: number, cols: number) => {
+    setDimensionsB({ rows, cols });
+    setMatrizB(Array.from({ length: rows }, () => Array(cols).fill(0)));
+  };
+
+  // Función para manejar cambios en los inputs de la matriz
+  const handleMatrixChange = (setMatrix: React.Dispatch<React.SetStateAction<number[][]>>, row: number, col: number, value: number) => {
+    setMatrix(prev => {
+      const updated = [...prev];
+      updated[row][col] = value;
+      return updated;
+    });
+  };
+
+  // Funciones para operaciones (ejemplo de suma)
+  const handleSum = () => {
+    if (dimensionsA.rows === dimensionsB.rows && dimensionsA.cols === dimensionsB.cols) {
+      const resultMatrix = matrizA.map((row, i) =>
+        row.map((val, j) => val + matrizB[i][j])
+      );
+      setResult(resultMatrix);
+    } else {
+      alert('Las matrices deben tener las mismas dimensiones para sumar.');
     }
-  }
-
-  function handleMatrixTypeChange(type: '1D' | '2D' | '3D') {
-    setMatrixType(type);
-    setMatrizDisplayValue(initializeMatrix(type, columns));
-  }
-
-  function handleColumnsChange(newColumns: number) {
-    setColumns(newColumns);
-    setMatrizDisplayValue(initializeMatrix(matrixType, newColumns));
-  }
-
-  function handleNumberClick(value: number, rowIndex: number, colIndex?: number, depthIndex?: number) {
-    let newMatrix = JSON.parse(JSON.stringify(matrizDisplayValue));
-
-    if (matrixType === '1D') {
-      (newMatrix[0][0] as number[])[colIndex!] = value;
-    } else if (matrixType === '2D') {
-      (newMatrix[0][rowIndex] as number[])[colIndex!] = value;
-    } else if (matrixType === '3D') {
-      (newMatrix[rowIndex] as number[])[colIndex!] = value;
-    }
-
-    setMatrizDisplayValue(newMatrix);
-  }
-
-  const getMatrixDisplayStyle = () => {
-    let columnsCount;
-    switch (matrixType) {
-      case '1D':
-        columnsCount = columns;
-        break;
-      case '2D':
-        columnsCount = columns;
-        break;
-      case '3D':
-        columnsCount = columns;
-        break;
-      default:
-        columnsCount = 1;
-    }
-
-    return {
-      gridTemplateColumns: `repeat(${columnsCount}, 1fr)`,
-    };
   };
 
   return (
-    <div className="calculator-container">
-      <div className="logo">
-        <img src={casio} alt="Mi Calculadora Logo" className="logo-image" />
+    <div>
+      <h1>Calculadora de Matrices</h1>
+
+      {/* Dimensiones de la matriz A */}
+      <div>
+        <h2>Matriz A</h2>
+        <label>Filas: </label>
+        <input
+          type="number"
+          value={dimensionsA.rows}
+          onChange={e => handleDimensionsAChange(Number(e.target.value), dimensionsA.cols)}
+        />
+        <label>Columnas: </label>
+        <input
+          type="number"
+          value={dimensionsA.cols}
+          onChange={e => handleDimensionsAChange(dimensionsA.rows, Number(e.target.value))}
+        />
+        {/* Inputs para llenar la matriz A */}
+        <div className='inputs-matriz'>
+          {matrizA.map((row, i) => (
+            <div key={i}>
+              {row.map((val, j) => (
+                <input
+                  key={j}
+                  type="number"
+                  value={val}
+                  onChange={e => handleMatrixChange(setMatrizA, i, j, Number(e.target.value))}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="matrix-display" style={getMatrixDisplayStyle()}>
-        {matrixType === '1D' && matrizDisplayValue[0][0].map((val, colIndex) => (
-          <input
-            key={colIndex}
-            type="number"
-            value={val}
-            onChange={(e) => handleNumberClick(Number(e.target.value), 0, colIndex)} />
-        ))}
+      {/* Dimensiones de la matriz B */}
+      <div>
+        <h2>Matriz B</h2>
+        <label>Filas: </label>
+        <input
+          type="number"
+          value={dimensionsB.rows}
+          onChange={e => handleDimensionsBChange(Number(e.target.value), dimensionsB.cols)}
+        />
+        <label>Columnas: </label>
+        <input
+          type="number"
+          value={dimensionsB.cols}
+          onChange={e => handleDimensionsBChange(dimensionsB.rows, Number(e.target.value))}
+        />
+        {/* Inputs para llenar la matriz B */}
+        <div className='inputs-matriz'>
+          {matrizB.map((row, i) => (
+            <div key={i}>
+              {row.map((val, j) => (
+                <input
+                  key={j}
+                  type="number"
+                  value={val}
+                  onChange={e => handleMatrixChange(setMatrizB, i, j, Number(e.target.value))}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
 
-        {matrixType === '2D' && matrizDisplayValue[0].map((row, rowIndex) => (
-          <div key={rowIndex} style={{ display: 'contents' }}>
-            {row.map((val, colIndex) => (
-              <input
-                key={colIndex}
-                type="number"
-                value={val}
-                onChange={(e) => handleNumberClick(Number(e.target.value), rowIndex, colIndex)} />
+      {/* Botones para operaciones */}
+      <div className='botones-operacion'>
+        <button onClick={handleSum}><FaPlus /></button>
+        <button><FaMinus /></button>
+        <button><FaTimes /></button>
+        <button>A<sup>-1</sup></button>
+        <button>B<sup>-1</sup></button>
+      </div>
+
+      {/* Resultado */}
+      <div>
+        <h2>Resultado</h2>
+        {result ? (
+          <div>
+            {result.map((row, i) => (
+              <div key={i}>
+                {row.map((val, j) => (
+                  <span key={j}>{val} </span>
+                ))}
+              </div>
             ))}
           </div>
-        ))}
-
-        {matrixType === '3D' && matrizDisplayValue.map((layer, layerIndex) => (
-          <div key={layerIndex} style={{ display: 'contents' }}>
-            {layer.map((val, colIndex) => (
-              <input
-                key={colIndex}
-                type="number"
-                value={val}
-                onChange={(e) => handleNumberClick(Number(e.target.value), layerIndex, colIndex)} />
-            ))}
-          </div>
-        ))}
-      </div>
-
-      <div className="matrix-type-selector">
-        <Button className="button" value="1D" onClick={() => handleMatrixTypeChange('1D')} />
-        <Button className="button" value="2D" onClick={() => handleMatrixTypeChange('2D')} />
-        <Button className="button" value="3D" onClick={() => handleMatrixTypeChange('3D')} />
-      </div>
-
-      <div className="button-container">
-        <label>
-          Número de columnas:
-          <input
-            type="number"
-            value={columns}
-            onChange={(e) => handleColumnsChange(Number(e.target.value))}
-            min={1}
-          />
-        </label>
-      </div>
-
-      <div className="button-container">
-        <Button className="button" value="0" onClick={() => {}} />
-        <Button className="button" value="1" onClick={() => {}} />
-        <Button className="button" value="2" onClick={() => {}} />
-        <Button className="button" value="+" onClick={() => {}} />
-        <Button className="button" value="-" onClick={() => {}} />
-        <Button className="button" value="=" onClick={() => {}} />
+        ) : (
+          <p>No hay resultado aún.</p>
+        )}
       </div>
     </div>
   );
 }
 
-export default Calculator;
+export default MatrixCalculator;
