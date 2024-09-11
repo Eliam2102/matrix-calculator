@@ -12,7 +12,7 @@ Este proyecto es una calculadora de matrices unidimensionales, bidimensionales y
 
 ## Tecnologías Utilizadas
 
-- **React(/https://es.react.dev/)**: Biblioteca JavaScript para construir interfaces de usuario.
+- **React(https://es.react.dev/)**: Biblioteca JavaScript para construir interfaces de usuario.
 - **TypeScript**: Superset de JavaScript que añade tipado estático.
 - **SweetAlert**: Librería para mostrar alertas personalizadas en la interfaz.
 - **Zod**: Librería para la validación de esquemas y manejo de datos.
