@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import './Calculator.css';
+import Swal from 'sweetalert2';
 import { FaPlus, FaTimes} from 'react-icons/fa';
 import { FaMinus } from 'react-icons/fa6';
+import Fraction from 'fraction.js';
+import { inv, det } from 'mathjs';
+import Button from './Button';
+
 
 function MatrixCalculator() {
-  // Estados para matrices A y B
+  // Euso de HOOKS para definir el estado de las matirces
   const [matrizA, setMatrizA] = useState<number[][]>([[0]]);
   const [matrizB, setMatrizB] = useState<number[][]>([[0]]);
   const [dimensionsA, setDimensionsA] = useState({ rows: 1, cols: 1 });
   const [dimensionsB, setDimensionsB] = useState({ rows: 1, cols: 1 });
-  const [result, setResult] = useState<number[][] | null>(null);
+  const [result, setResult] = useState<any[][] | null>(null);
 
   // Función para actualizar las dimensiones de la matriz A
   const handleDimensionsAChange = (rows: number, cols: number) => {
@@ -23,7 +28,7 @@ function MatrixCalculator() {
     setMatrizB(Array.from({ length: rows }, () => Array(cols).fill(0)));
   };
 
-  // Función para manejar cambios en los inputs de la matriz
+  // Función para hacer los inputs dinámicos
   const handleMatrixChange = (setMatrix: React.Dispatch<React.SetStateAction<number[][]>>, row: number, col: number, value: number) => {
     setMatrix(prev => {
       const updated = [...prev];
@@ -32,15 +37,198 @@ function MatrixCalculator() {
     });
   };
 
-  // Funciones para operaciones (ejemplo de suma)
+  // Función para limpiar la calculadora
+  const handleClear = () => {
+    setMatrizA([[0]]);
+    setMatrizB([[0]]);
+    setDimensionsA({ rows: 1, cols: 1 });
+    setDimensionsB({ rows: 1, cols: 1 });
+    setResult(null);
+    Swal.fire({
+      icon: 'info',
+      title: 'Calculadora reiniciada',
+      text: 'Todos los campos han sido limpiados.',
+      timer: 2000,
+      timerProgressBar: true,
+    });
+  };
+
+  //Inicia el bloque de las funciones para poder realizar los cálculos
+  //Función para suma
   const handleSum = () => {
     if (dimensionsA.rows === dimensionsB.rows && dimensionsA.cols === dimensionsB.cols) {
       const resultMatrix = matrizA.map((row, i) =>
         row.map((val, j) => val + matrizB[i][j])
       );
       setResult(resultMatrix);
+    Swal.fire({
+      icon: 'success',
+      title: 'Operación realiza con éxito',
+      text: 'A continuación tu resulttado: ',
+      timer: 2000,
+      timerProgressBar: true,
+    });
+
     } else {
-      alert('Las matrices deben tener las mismas dimensiones para sumar.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Las matrices deben tener las mismas dimensiones para sumar.',
+      });    }
+  };
+
+  // Función para la resta
+  const handleSubtraction = () => {
+    if (
+      dimensionsA.rows === dimensionsB.rows &&
+      dimensionsA.cols === dimensionsB.cols
+    ) {
+      const resultMatrix = matrizA.map((row, i) =>
+        row.map((val, j) => val - matrizB[i][j])
+      );
+      setResult(resultMatrix);
+      Swal.fire({
+        icon: 'success',
+        title: 'Operación realizada con éxito',
+        text: 'A continuación tu resultado: ',
+        timer: 2000,
+        timerProgressBar: true,
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Las matrices deben tener las mismas dimensiones para restar.',
+      });
+    }
+  };
+
+   // Función para la multiplicación
+   const handleMultiplication = () => {
+    if (dimensionsA.cols === dimensionsB.rows) {
+      const resultMatrix = Array.from({ length: dimensionsA.rows }, () =>
+        Array(dimensionsB.cols).fill(0)
+      );
+
+      for (let i = 0; i < dimensionsA.rows; i++) {
+        for (let j = 0; j < dimensionsB.cols; j++) {
+          for (let k = 0; k < dimensionsA.cols; k++) {
+            resultMatrix[i][j] += matrizA[i][k] * matrizB[k][j];
+          }
+        }
+      }
+
+      setResult(resultMatrix);
+      Swal.fire({
+        icon: 'success',
+        title: 'Operación realizada con éxito',
+        text: 'A continuación tu resultado: ',
+        timer: 2000,
+        timerProgressBar: true,
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'El número de columnas de A debe ser igual al número de filas de B para multiplicar.',
+      });
+    }
+  };
+
+
+  //Calcular la inversa
+  // Para expresar los números como fracciones
+  const convertToFractions = (matrix: number[][]): string[][] => {
+    return matrix.map(row => row.map(value => new Fraction(value).toFraction(true)));
+  };
+  const handleInverseA = () => {
+    try {
+      const rows = matrizA.length;
+      const cols = matrizA[0].length;
+  
+      // Verificar que la matriz es cuadrada, ya que, es necesario según la formula
+      if (rows !== cols) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'La matriz debe ser cuadrada para calcular su inversa.',
+        });
+        return;
+      }
+  
+      // Verificar que la matriz es invertible (determinante no es cero)
+      const determinant = det(matrizA);
+      if (determinant === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Atención!!',
+          text: 'La matriz es singular y no tiene inversa.',
+        });
+        return;
+      }
+  
+      // Calcular la inversa
+      const inversaA = inv(matrizA);
+      const fractionInversaA = convertToFractions(inversaA as number[][]);
+      setResult(fractionInversaA);
+  
+      Swal.fire({
+        icon: 'success',
+        title: 'Inversa calculada',
+        text: 'Matriz A invertida con éxito.',
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se puede calcular la inversa de la matriz A.',
+      });
+    }
+  };
+
+
+  const handleInverseB = () => {
+    try {
+      const rows = matrizB.length;
+      const cols = matrizB[0].length;
+  
+      // Verificar que la matriz es cuadrada
+      if (rows !== cols) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'La matriz debe ser cuadrada para calcular su inversa.',
+        });
+        return;
+      }
+  
+      // Verificar que la matriz es invertible (determinante no es cero)
+      const determinant = det(matrizB);
+      if (determinant === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Atención!!',
+          text: 'La matriz es singular y no tiene inversa.',
+        });
+        return;
+      }
+  
+      // Calcular la inversa
+      const inversaB = inv(matrizB);
+      const fractionInversaB = convertToFractions (inversaB as number[][]);
+      setResult(fractionInversaB);
+  
+      Swal.fire({
+        icon: 'success',
+        title: 'Inversa calculada',
+        text: 'Matriz B invertida con éxito.',
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se puede calcular la inversa de la matriz B.',
+      });
     }
   };
 
@@ -114,25 +302,29 @@ function MatrixCalculator() {
 
       {/* Botones para operaciones */}
       <div className='botones-operacion'>
-        <button onClick={handleSum}><FaPlus /></button>
-        <button><FaMinus /></button>
-        <button><FaTimes /></button>
-        <button>A<sup>-1</sup></button>
-        <button>B<sup>-1</sup></button>
+        <Button onClick={handleSum}>A <FaPlus/> B</Button>
+        <Button onClick={handleSubtraction}>A <FaMinus/> B</Button>
+        <Button onClick={handleMultiplication}>A <FaTimes/> B</Button>
+        <Button onClick={handleInverseA}>A<sup>-1</sup></Button>
+        <Button onClick={handleInverseB}>B<sup>-1</sup></Button>
+        <Button onClick={handleClear}>C</Button>
       </div>
-
       {/* Resultado */}
-      <div>
+      <div className='container-resultado'>
         <h2>Resultado</h2>
         {result ? (
-          <div>
-            {result.map((row, i) => (
-              <div key={i}>
-                {row.map((val, j) => (
-                  <span key={j}>{val} </span>
-                ))}
-              </div>
-            ))}
+          <div className="resultado-contenedor">
+            <span className="corchete-izquierdo">[</span>
+            <div className="resultado-matriz">
+              {result.map((row, i) => (
+                <div key={i} className="resultado-fila">
+                  {row.map((val, j) => (
+                    <span key={j} className="resultado-valor">{val}</span>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <span className="corchete-derecho">]</span>
           </div>
         ) : (
           <p>No hay resultado aún.</p>

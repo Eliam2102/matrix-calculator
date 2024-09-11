@@ -5,24 +5,24 @@ body {
   color: #FFFFFF;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Cambiar a flex-start para evitar centrar en el eje vertical */
-  min-height: 100vh; /* Cambiar a min-height para permitir que el contenido crezca */
+  align-items: flex-start;
+  min-height: 100vh; 
   margin: 0;
-  padding: 20px; /* Añadir un pequeño padding para evitar que el contenido toque los bordes */
+  padding: 20px; 
   box-sizing: border-box;
-  overflow-y: auto; /* Permitir el scroll vertical global */
+  overflow-y: auto;
 }
 .botones-operacion {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual tamaño */
-  gap: 10px; /* Espacio entre botones */
-  justify-items: center; /* Centrar botones horizontalmente */
-  margin-top: 20px; /* Espacio superior */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  justify-items: center; 
+  margin-top: 20px;
 }
 
 .inputs-matriz {
-  width: 100%; /* O un ancho específico si prefieres */
-  max-width: 500px; /* Establece un ancho máximo */
+  width: 100%;
+  max-width: 500px;
   margin-left: 150px;
 }
 /* Contenedor principal de la calculadora */
@@ -33,11 +33,11 @@ body {
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
   width: 90vw;
   max-width: 600px;
-  max-height: 90vh; /* Limitar la altura máxima del contenedor */
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow-y: auto; /* Habilitar scroll si el contenido excede la altura */
+  overflow-y: auto;
   box-sizing: border-box;
 }
 
@@ -80,8 +80,8 @@ input[type="number"]:focus {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-height: 50vh; /* Limitar altura de matrices */
-  overflow-y: auto; /* Habilitar scroll en las matrices si es necesario */
+  max-height: 50vh;
+  overflow-y: auto;
 }
 
 .matrix-row {
@@ -145,6 +145,38 @@ button:active {
   animation: fadeIn 0.5s forwards;
 }
 
+.container-resultado {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.resultado-contenedor {
+  display: inline-block;
+  position: relative;
+  padding: 10px;
+}
+
+.corchete-izquierdo, .corchete-derecho {
+  font-size: 3rem; /* Tamaño de los corchetes */
+  vertical-align: top;
+}
+
+.resultado-matriz {
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.resultado-fila {
+  display: flex;
+  justify-content: center;
+}
+
+.resultado-valor {
+  margin: 0 5px;
+  font-size: 1.5rem;
+}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -177,5 +209,10 @@ button:active {
 
   .result-container {
     font-size: 1.3rem;
+  }
+  .inputs-matriz {
+    max-width: 100%;
+    margin-left: 0;
+    padding: 5px;
   }
 }
